@@ -1,9 +1,9 @@
 # Cooper-Hewitt-App
 Test project with the Cooper Hewitt API
 
-## Preview
+## Screenshoot
 
-![Screenshoot](https://github.com/gabrieldominguezduran/Cooper-Hewitt-App/blob/master/src/img/app.png?raw=true)
+![Screenshoot](https://github.com/gabrieldominguezduran/Cooper-Hewitt-App/blob/master/assets/app.png)
 
 ## Clone this project
 ```
