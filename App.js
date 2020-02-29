@@ -1,72 +1,77 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react';
 import {
-    StyleSheet,
-    View,
-    Text,
-    Image,
-    FlatList,
-  } from 'react-native'
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
+import Header from './components/Header';
 
 export default class Home extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
-      dataSource: []
-    }
+      dataSource: [],
+      isLoading: true,
+    };
   }
 
-  renderItem = ({ item }) => {
-    return(
-      <View>
-        <Image
-        style={{width: 250, height: 250, margin: 10,}}
-        source={{ uri: item.images }}/>
+  renderItem = ({item}) => {
+    return (
+      <View style={styles.container}>
+        <Image style={styles.images} source={{uri: item.images}} />
         <View>
-          <Text>
-            {item.title}
-          </Text>
-          <Text>
-            {item.description}
-          </Text>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.text}>{item.description}</Text>
         </View>
-    </View>
-    )
-    
-  }
+      </View>
+    );
+  };
 
   componentDidMount() {
-    const url = 'https://api.collection.cooperhewitt.org/rest/?method=cooperhewitt.exhibitions.getObjects&access_token=d5b4aa8389d940aa8f0bcf72e89b9b84&tag=activist-poster&per_page=30'
+    const url =
+      'https://api.collection.cooperhewitt.org/rest/?method=cooperhewitt.exhibitions.getObjects&access_token=d5b4aa8389d940aa8f0bcf72e89b9b84&tag=activist-poster&per_page=30';
 
     fetch(url)
-    .then((response) => response.json())
-    .then((responseJson) => {
+      .then(response => response.json())
+      .then(responseJson => {
+        let values = [];
 
-      let values = []
+        responseJson.objects.map(data => {
+          values.push({
+            images: data.images[0].n.url,
+            title: data.title,
+            description: data.gallery_text,
+          });
+        });
 
-      responseJson.objects.map((data) => {
-        values.push({images: data.images[0].n.url, title: data.title, description: data.description})    
-      })
-      
         this.setState({
-          dataSource: values
-        })
-    })
-    .catch((error) => {
-      console.log(error)
-      
-    })
+          dataSource: values,
+          isLoading: false,
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   render() {
-    return (
-      <View style={styles.container}>
+    return this.state.isLoading ? (
+      <View style={styles.spinner}>
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    ) : (
+      <View>
+        <Header />
         <FlatList
           data={this.state.dataSource}
           renderItem={this.renderItem}
           keyExtractor={(item, index) => index}
         />
       </View>
-    )
+    );
   }
 }
 
@@ -75,5 +80,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }
-})
+  },
+  images: {
+    width: 370,
+    height: 500,
+    margin: 15,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    padding: 15,
+  },
+  text: {
+    fontSize: 20,
+    padding: 15,
+  },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
