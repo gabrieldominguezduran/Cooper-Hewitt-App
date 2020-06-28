@@ -32,7 +32,7 @@ export default class Home extends Component {
 
   componentDidMount() {
     const url =
-      'https://api.collection.cooperhewitt.org/rest/?method=cooperhewitt.exhibitions.getObjects&access_token=d5b4aa8389d940aa8f0bcf72e89b9b84&tag=activist-poster&per_page=30';
+      'https://api.collection.cooperhewitt.org/rest/?method=cooperhewitt.exhibitions.getObjects&access_token=""4&tag=activist-poster&per_page=30';
 
     fetch(url)
       .then(response => response.json())
